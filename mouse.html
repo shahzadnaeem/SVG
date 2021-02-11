@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script>
+        var canvas;
+        var grctx;
+
+        var u = 10;
+
+        const pos = {
+            x: innerWidth / 2,
+            y: innerHeight / 2
+        };
+
+        window.onmousemove = function (e) {
+            pos.x = e.clientX;
+            pos.y = e.clientY;
+
+        }
+
+        function randomColour() {
+            var s = "0123456789ABCDEF";
+            var c = "#";
+            for (var i = 0; i < 6; i++) {
+                c += s[Math.ceil(Math.random() * 15)]
+            }
+            return c
+        }
+
+        var items = [];
+
+        window.onload = function myfunction() {
+            canvas = document.getElementById('cw');
+            grctx = canvas.getContext('2d');
+
+            for (var i = 0; i < 10; i++) {
+                var r = 30;
+                var x = Math.random() * (innerWidth - 2 * r) + r;
+                var y = Math.random() * (innerHeight - 2 * r) + r;
+                var t = new ob(innerWidth / 2, innerHeight / 2, 5, "red", Math.random() * 200 + 20, 2);
+
+                items.push(t);
+            }
+
+            grctx.lineWidth = "2";
+            grctx.globalAlpha = 0.5;
+
+            resize();
+
+            anim();
+        }
+
+        window.onresize = function () {
+            resize();
+        }
+
+        function resize() {
+            canvas.height = innerHeight;
+            canvas.width = innerWidth;
+
+            for (var i = 0; i < 101; i++) {
+                var r = 30;
+                var x = Math.random() * (innerWidth - 2 * r) + r;
+                var y = Math.random() * (innerHeight - 2 * r) + r;
+                items[i] = new ob(innerWidth / 2, innerHeight / 2, 4, randomColour(), Math.random() * 200 + 20, 0.05);
+
+            }
+        }
+
+        function ob(x, y, r, cc, o, s) {
+            this.x = x;
+            this.y = y;
+            this.r = r;
+            this.cc = cc;
+            this.theta = Math.random() * Math.PI * 2;
+            this.s = s * Math.random() * 2.0;
+            this.o = o;
+            this.t = Math.random() * 250;
+
+            this.o = o;
+
+            this.draw = function () {
+                const ls = {
+                    x: this.x,
+                    y: this.y
+                };
+
+                this.theta += this.s;
+                this.x = pos.x + Math.cos(this.theta) * this.t;
+                this.y = pos.y + Math.sin(this.theta) * this.t;
+
+                grctx.beginPath();
+                grctx.lineWidth = this.r;
+                grctx.strokeStyle = this.cc;
+                grctx.moveTo(ls.x, ls.y);
+                grctx.lineTo(this.x, this.y);
+                grctx.stroke();
+                grctx.closePath();
+
+            }
+        }
+
+        function anim() {
+            requestAnimationFrame(anim);
+
+            grctx.fillStyle = "rgba(0,0,0,0.05)";
+            grctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            items.forEach(function (e, i) {
+                e.draw();
+            });
+
+        }
+    </script>
+
+    <style>
+        #cw {
+            position: fixed;
+            z-index: -1;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="cw"></canvas>
+</body>
+
+</html>
