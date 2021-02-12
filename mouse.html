@@ -14,6 +14,7 @@
         var xPosInfo = null;
         var yPosInfo = null;
         var trakInfo = null;
+        var resetButton = null;
 
         var tracking = false;
 
@@ -33,11 +34,8 @@
 
         var items = [];
 
-        window.onload = function myfunction() {
+        window.onload = function init() {
             canvas = document.getElementById('cw');
-
-            pos.x = canvas.width / 2;
-            pos.y = canvas.height / 2;
 
             canvas.onmousemove = function( e ) {
 
@@ -47,13 +45,18 @@
                 }
             }
 
-            window.onclick = function( e ) {
+            canvas.onclick = function( e ) {
                 tracking = ! tracking;
             }
 
             xPosInfo = document.getElementById( "x" );
             yPosInfo = document.getElementById( "y" );
             trakInfo = document.getElementById( "trak" );
+            resetButton = document.getElementById( "reset" );
+
+            resetButton.onclick = function( e ) {
+                resize();
+            }
 
             grctx = canvas.getContext('2d');
 
@@ -70,68 +73,106 @@
             // canvas.height = window.innerHeight;
             // canvas.width = window.innerWidth;
 
+            tracking = false;
+
+            pos.x = canvas.width / 2;
+            pos.y = canvas.height / 2;
+
             const xScale = canvas.width / window.innerWidth;
             const yScale = canvas.height / window.innerHeight;
 
             console.info( `xs = ${xScale}, ys = ${yScale}` );
 
-            for (var i = 0; i < 50; i++) {
+            const numItems = 100;
 
-                const spin = ( Math.random() * ( 2 + i / 30.0 ) + 0.25 ) / 180 * Math.PI * ( Math.random() > 0.5 ? 1.0 : -1.0 );
+            for (var i = 0; i < 100; i++) {
+
+                const lineWidth = Math.random() * 5.0 + 2.5;
+                const radius = 1.1 * ( 50 + 2 * i ) + 1.1 * i;
+                const theta = 2 * Math.PI * i / numItems;
+                const spin = ( Math.random() * ( 1.0 + i / ( numItems / 5.0 ) ) - 1.5 ) / 180 * Math.PI;
 
                 items[i] = new ob(
                     pos.x,
                     pos.y,
-                    Math.random() * 2.5 + 1.5,
+                    lineWidth,
                     randomColour(),
-                    // Math.random() * ( 100 + 2 * i ) + 2 * i,
-                    1.3 * ( 50 + 2 * i ) + 1.4 * i,
+                    radius,
+                    theta,
                     spin
                 );
             }
         }
 
-        function ob(x, y, r, col, o, spin) {
+        function ob(x, y, lw, col, radius, theta, spin) {
+
+            const initDrFlip = 200;
+
+            this.threshold = Math.random();
             this.x = x;
             this.y = y;
-            this.r = r;
+            this.lw = lw;
             this.col = col;
-            this.theta = Math.random() * Math.PI * 2;
+            this.r = radius;
+            this.dr = radius * 0.01 * Math.random();
+            this.drFlip = initDrFlip; // Math.random() * initDrFlip + 1;
             this.spin = spin;
-            this.o = o;
-            this.t = Math.random() * 250;
-            this.t = this.o;
 
+            this.theta = theta;
 
             this.x = x + Math.cos(this.theta) * this.t;
             this.y = y + Math.sin(this.theta) * this.t;
 
             this.draw = function () {
+
+                // if ( Math.random() <= this.threshold ) return;
+
                 const ls = {
                     x: this.x,
                     y: this.y
                 };
 
                 this.theta += this.spin;
+                this.r     += this.dr;
+                this.drFlip --;
 
-                this.x = pos.x + Math.cos(this.theta) * this.t;
-                this.y = pos.y + Math.sin(this.theta) * this.t;
+                let flipped = false;
 
-                grctx.beginPath();
-                grctx.lineWidth = this.r;
-                grctx.strokeStyle = this.col;
-                grctx.moveTo(ls.x, ls.y);
-                grctx.lineTo(this.x, this.y);
-                grctx.stroke();
-                grctx.closePath();
+                if ( this.drFlip <= 0 )
+                {
+                    this.drFlip = initDrFlip;
+                    this.dr     = -this.dr;
 
+                    flipped = true;
+                }
+
+                this.x = pos.x + Math.cos(this.theta) * this.r;
+                this.y = pos.y + Math.sin(this.theta) * this.r;
+
+                if ( flipped )
+                {
+                    grctx.beginPath();
+                    grctx.fillStyle = this.col;
+                    grctx.arc( this.x, this.y, this.lw, 0, 2 * Math.PI );
+                    grctx.fill();
+                } else {
+                    grctx.beginPath();
+
+                    grctx.lineWidth = this.lw;
+                    grctx.strokeStyle = this.col;
+                    grctx.moveTo(ls.x, ls.y);
+                    grctx.lineTo(this.x, this.y);
+                    grctx.stroke();
+
+                    // grctx.closePath();
+                }
             }
         }
 
         function anim() {
             requestAnimationFrame(anim);
 
-            grctx.fillStyle = "rgba(0,0,0,0.07)";
+            grctx.fillStyle = "rgba(0,0,15,0.05)";
             grctx.fillRect(0, 0, canvas.width, canvas.height);
 
             xPosInfo.value = pos.x;
@@ -166,6 +207,12 @@
             z-index: -1; */
             display: block;
         }
+
+        button {
+            margin-top: 8px;
+            background-color: darkgoldenrod;
+            color: white;
+        }
     </style>
 </head>
 
@@ -180,6 +227,9 @@
 
         <label> Tracking= </label>
         <input id="trak" type="test" disabled="true" placeholder="Tracking Mouse?">
+    </div>
+    <div>
+        <button id="reset"> Reset </button>
     </div>
 
     <h1>Canvas</h1>
