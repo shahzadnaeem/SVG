@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>SVG Stuff</h1>
+        <svg
+            width="1200"
+            height="1200"
+            viewBox="-15 -15 35 35"
+        >
+            <style>
+                .stdText { font: bold 5% serif }
+            </style>
+
+            <defs>
+                <pattern id="minorGrid" width="0.5" height="0.5" patternUnits="userSpaceOnUse">
+                    <path d="M 0.5 0 L 0 0 0 0.5" fill="none" stroke="gray" stroke-width="0.125%"/>
+                 </pattern>
+                 <pattern id="grid" width="5" height="5" patternUnits="userSpaceOnUse">
+                    <rect width="5" height="5" fill="url(#minorGrid)" fill="none"/>
+                    <path d="M 5 0 L 0 0 0 5" fill="none" stroke="gray" stroke-width="0.25%"/>
+                 </pattern>
+
+                 <marker id="arrow" viewBox="-5 -5 10 10" refX="5" refY="0"
+                    markerWidth="6" markerHeight="6"
+                    orient="auto-start-reverse">
+                    <path d="M -5 -5 L 5 0 L -5 5 z" />
+                </marker>
+
+                 <g id="box">
+                     <rect x="0" y="0" width="10" height="10"></rect>
+                 </g>
+
+                 <g id="tri2">
+                    <polygon points="0,0 17.3,0, 17.3,10" fill="lightyellow" opacity="0.5" stroke="blue" stroke-width="0.25%" />
+                </g>
+
+                <g id="line">
+                    <line x1="-15" y1="-12" x2="12" y2="15" />
+                    <line x1="0" y1="0" x2="0" y2="3" />
+                </g>
+            </defs>
+
+            <rect fill="url(#grid)" height="100%" width="100%" x="-15" y="-15"></rect>            
+
+            <g transform="scale(1,-1)">
+                <line x1="-15" y1="0" x2="15" y2="0" stroke="darkblue" stroke-width="0.25%"
+                    marker-end="url(#arrow)" />
+                <line x1="0" y1="-15" x2="0" y2="15" stroke="darkgreen" stroke-width="0.25%"
+                    marker-end="url(#arrow)" />
+                
+                <use href="#line" stroke="lightgreen" stroke-width="0.25%"></use>
+
+                <g transform="scale(-1,1)">
+                    <use href="#line" stroke="orange" stroke-width="0.25%" opacity="0.66"></use>
+                </g>
+
+                <g transform="scale(1,-1)">
+                    <use href="#line" stroke="pink" stroke-width="0.25%" opacity="0.66"></use>
+                </g>
+
+                <g transform="scale(-1,-1)">
+                    <use href="#line" stroke="steelblue" stroke-width="0.25%" opacity="0.66"></use>
+                </g>
+            </g>
+
+            <g transform="scale(1,-1)">
+                <use href="#line" stroke="lightgreen" stroke-width="0.25%" stroke-dasharray="1 1">
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 0 0"
+                        to="360 0 0"
+                        dur="15s"
+                        repeatCount="10" />
+                </use>
+
+
+                <use href="#line" stroke="goldenrod" stroke-width="0.25%" stroke-dasharray="1 1">
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 0 0"
+                        to="270 0 0"
+                        dur="15s"
+                        repeatCount="10" />
+                </use>
+
+                <use href="#line" stroke="pink" stroke-width="0.25%" stroke-dasharray="1 1" opacity="0.66">
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 0 0"
+                        to="90 0 0"
+                        dur="15s"
+                        repeatCount="10" />
+                </use>
+
+                <use href="#line" stroke="steelblue" stroke-width="0.25%" stroke-dasharray="1 1" opacity="0.66">
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 0 0"
+                        to="180 0 0"
+                        dur="15s"
+                        repeatCount="10" />
+                </use>
+            </g>
+
+            <g>
+                <text class="stdText"> 0 </text>
+                <text x="2" y="-5" class="stdText">1. y=x+3</text>
+                <text x="-4" y="-7" class="stdText">2. y=-x+3</text>
+                <text x="-6" y="-3" class="stdText">3. y=-x-3</text>
+                <text x="-4" y="8" class="stdText">4. y=x-3</text>
+            </g>
+
+            <g transform="scale(1,-1)">
+                <use href="#box" x="2.5" y="2.5" fill="lightgreen" opacity="0.35">
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="360 7.5 7.5"
+                        to="0 7.5 7.5"
+                        dur="60s"
+                        repeatCount="10" />
+                </use>
+
+                <use href="#box" x="-12.5" y="2.5" fill="orange" opacity="0.35">
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 -7.5 7.5"
+                        to="360 -7.5 7.5"
+                        dur="60s"
+                        repeatCount="10" />
+                </use>
+
+                <use href="#box" x="-12.5" y="-12.5" fill="pink" opacity="0.35">
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="360 -7.5 -7.5"
+                        to="0 -7.5 -7.5"
+                        dur="60s"
+                        repeatCount="10" />
+                </use>
+
+                <use href="#box" x="2.5" y="-12.5" fill="steelblue" opacity="0.35">
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 7.5 -7.5"
+                        to="360 7.5 -7.5"
+                        dur="60s"
+                        repeatCount="10" />
+                </use>
+            </g>
+        </svg>
+    </body>
+</html>

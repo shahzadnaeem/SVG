@@ -1,0 +1,66 @@
+<svg viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+    <style>
+      .small { font: italic 20px sans-serif; }
+      .heavy { font: bold 30px sans-serif; }
+  
+      /* Note that the color of the text is set with the    *
+       * fill property, the color property is for HTML only */
+      .Rrrrr { font: italic 40px serif; fill: rgb(255, 0, 234); }
+      .Yello { font: bold-italic 40px serif; fill: greenyellow }
+    </style>
+  
+    <g transform="scale(1,-1)">
+        <text x="20" y="35" class="small">Jenny</text>
+        <animateTransform
+            attributeName="transform"
+            type="rotate"
+            from="360 20 30"
+            to="0 20 35"
+            dur="15s"
+            repeatCount="10" />
+    </g>
+
+    <g transform="scale(1,-1)">
+        <text x="20" y="35" class="small" fill="lightblue">Jenny</text>
+        <animateTransform
+            attributeName="transform"
+            type="scale"
+            from="0.5"
+            to="2"
+            dur="5s"
+            repeatCount="indefinite" />
+    </g>
+
+    <g transform="scale(1,-1)">
+        <text x="80" y="45" class="heavy">HATES</text>
+        <animateTransform
+            attributeName="transform"
+            type="translate"
+            from="0 0"
+            to="200 0"
+            dur="10s"
+            repeatCount="indefinite" />
+    </g>
+
+    <g transform="scale(1,-1)">
+        <text x="80" y="45" class="Yello">HATES</text>
+        <animateTransform
+            attributeName="transform"
+            type="scale"
+            from="1"
+            to="3"
+            dur="6s"
+            repeatCount="indefinite" />
+    </g>
+
+    <g transform="scale(1,-1)">
+        <text x="30" y="75" class="Rrrrr">Computing!</text>
+        <animateTransform
+            attributeName="transform"
+            type="scale"
+            from="0.2"
+            to="2.0"
+            dur="2s"
+            repeatCount="indefinite" />
+    </g>
+</svg>
