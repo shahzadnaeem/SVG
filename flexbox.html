@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Flexbox Froggy - A game for learning CSS flexbox</title>
+    <link rel="stylesheet" href="js/animate.css/animate.min.css">
+    <link href='https://fonts.googleapis.com/css?family=PT+Sans|Fredoka+One|Source+Code+Pro' rel='stylesheet'
+        type='text/css'>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <section id="sidebar">
+        <div class="header">
+            <div>
+                <h1 class="title">Flexbox Froggy</h1>
+            </div>
+            <div id="level-counter">
+                <span class="arrow left">
+                    <span class="triangle"></span>
+                </span>
+                <span id="level-indicator">
+                    <span id="labelLevel" class="translate">Level</span>
+                    <span class="current">1</span>
+                    <span id="labelOf" class="translate">of</span>
+                    <span class="total">1</span>
+                    <span class="caret">▾</span>
+                </span>
+                <span class="arrow right">
+                    <span class="triangle"></span>
+                </span>
+                <div id="levelsWrapper" class="tooltip">
+                    <div id="levels"></div>
+                    <div id="labelReset" class="translate">Reset</div>
+                </div>
+            </div>
+        </div>
+        <p id="instructions">
+        <p>Bring the frogs home one last time by using the CSS properties you've learned:</p>
+        <ul>
+            <li><code class="help">justify-content</code></li>
+            <li><code class="help">align-items</code></li>
+            <li><code class="help">flex-direction</code></li>
+            <li><code class="help">order</code></li>
+            <li><code class="help">align-self</code></li>
+            <li><code class="help">flex-wrap</code></li>
+            <li><code class="help">flex-flow</code></li>
+            <li><code class="help">align-content</code><img src="https://code.org/api/hour/finish_flexbox_froggy.png">
+            </li>
+        </ul>
+        </p>
+        <div id="editor" class="">
+            <div id="css">
+                <div class="line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div>
+                <pre id="before">#pond {
+  display: flex;
+    </pre>
+                <textarea id="code" autofocus="" autocapitalize="none" style="height: 84px;"></textarea>
+                <pre id="after">}</pre>
+            </div>
+            <button id="next" class="translate animated animation">Next</button>
+        </div>
+    </section>
+    <section id="view">
+        <div id="board">
+            <div id="pond" style="flex-flow: column-reverse wrap-reverse;
+            align-content: space-between;
+            justify-content: center;">
+                <div class="frog red">
+                    <div class="bg animated pulse infinite"></div>
+                </div>
+                <div class="frog green">
+                    <div class="bg animated pulse infinite"></div>
+                </div>
+                <div class="frog green">
+                    <div class="bg animated pulse infinite"></div>
+                </div>
+                <div class="frog green">
+                    <div class="bg animated pulse infinite"></div>
+                </div>
+                <div class="frog green">
+                    <div class="bg animated pulse infinite"></div>
+                </div>
+                <div class="frog yellow">
+                    <div class="bg animated pulse infinite"></div>
+                </div>
+                <div class="frog yellow">
+                    <div class="bg animated pulse infinite"></div>
+                </div>
+            </div>
+            <div id="background" style="flex-flow: column-reverse wrap-reverse; place-content: space-between center;">
+                <div class="lilypad red">
+                    <div class="bg" style="transform: scale(0.903784) rotate(272.224deg);"></div>
+                </div>
+                <div class="lilypad green">
+                    <div class="bg" style="transform: scale(0.928893) rotate(248.095deg);"></div>
+                </div>
+                <div class="lilypad green">
+                    <div class="bg" style="transform: scale(0.863779) rotate(231.185deg);"></div>
+                </div>
+                <div class="lilypad green">
+                    <div class="bg" style="transform: scale(0.929332) rotate(285.751deg);"></div>
+                </div>
+                <div class="lilypad green">
+                    <div class="bg" style="transform: scale(0.87759) rotate(91.9176deg);"></div>
+                </div>
+                <div class="lilypad yellow">
+                    <div class="bg" style="transform: scale(0.981476) rotate(86.1175deg);"></div>
+                </div>
+                <div class="lilypad yellow">
+                    <div class="bg" style="transform: scale(0.987048) rotate(311.499deg);"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
