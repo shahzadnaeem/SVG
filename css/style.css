@@ -27,14 +27,20 @@
   a[href="#fa"] {
     font-family: Tahoma, Verdana, Segoe, sans-serif;
   }
-  
+
   body {
+    margin: 0;
+    /* background-color: #43A047;
+    color: rgba(255, 255, 255, 0.8); */
+    font-family: 'PT Sans', sans-serif;
+  }
+
+  #bodyFlex {
     display: flex;
     min-width: 600px;
     margin: 0;
     background-color: #43A047;
     color: rgba(255, 255, 255, 0.8);
-    font-family: 'PT Sans', sans-serif;
   }
   
   #sidebar {
@@ -46,6 +52,64 @@
     font-size: 15px;
   }
   
+  #extra {
+    background-color: lemonchiffon;
+    color: red;
+    display: block;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #myflexbox {
+    background-color: lightcoral;
+    color: purple;
+    padding: 0.5em;
+    display: flex;
+    flex-flow: column nowrap;
+    row-gap: 0.2em;
+  }
+
+  .myFlex1 {
+    background-color: darkgreen;
+    color: white;
+    padding-left: 0.5em;
+    height: 100px;
+  }
+
+  .myFlex2 {
+    background-color: darkblue;
+    color: white;
+    padding-left: 0.5em;
+    height: 200px;
+  }
+
+  #mycolflexbox {
+    background-color: lightcyan;
+    color: brown;
+    padding: 0.5em;
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row wrap;
+    column-gap: 0.2em;
+  }
+
+  .myColFlex1 {
+    background-color: darkgoldenrod;
+    color: white;
+    padding-left: 0.5em;
+    flex: 1;
+    min-width: 100px;
+  }
+
+  .myColFlex2 {
+    background-color: darkred;
+    color: white;
+    padding-left: 0.5em;
+    flex: 2;
+    min-width: 200px;
+  }
+
   .header {
     display: flex;
     flex-wrap: wrap;
