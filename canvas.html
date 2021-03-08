@@ -58,7 +58,7 @@
       }
     }
 
-    function makePolygon( numSides, radius = 100, offset = 0 )
+    function makePolygon( numSides, origin, radius = 100, offset = 0 )
     {
       let polygon = []
 
@@ -67,28 +67,31 @@
 
       for ( let i = 0; i < numSides; i ++ )
       {
-        let x = radius * Math.cos( theta )
-        let y = radius * Math.sin( theta )
+        let x = radius * Math.cos( theta ) + origin.x
+        let y = radius * Math.sin( theta ) + origin.y
 
         polygon.push( new Point( x, y ) )
+
+        theta += dtheta
       }
 
       return polygon;
     }
 
-    function drawPolygon( polygon )
+    // https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html
+    function pointInPolygon( p, po )
     {
-      let n = 0;
-      for ( const point of polygon )
-      {
-        console.log( `${n++}: (${point.x}, ${point.y}` )
+      let nv = po.length
+      let i, j
+      let c = false
+
+      for ( i = 0, j = nv - 1; i < nv; j = i++ ) {
+        if ( ( (po[i].y > p.y) != (po[j].y > p.y) ) &&
+              ( p.x < (po[j].x - po[i].x) * (p.y - po[i].y) / (po[j].y - po[i].y) + po[i].x) )
+                  c = ! c
       }
-    }
 
-
-    function pointInPolygon( )
-    {
-
+      return c
     }
 
     function drawPoint( ctx, x, y )
@@ -168,7 +171,7 @@
 
       const execTime = Math.floor( window.performance.now() - start )
 
-      const stats=`drawCircle(): time=${execTime}ms points=${numPoints} badPoints=${0}`
+      const stats=`time=${execTime}ms, points=${numPoints}, badPoints=${0}`
       setStats( id, stats )
 
       console.timeEnd(label);
@@ -223,18 +226,101 @@
 
       const pi = 4 * goodPoints / numPoints
 
-      const stats=`drawCircle2(): time=${execTime}ms points=${numPoints} goodPoints=${goodPoints}, pi=${pi}`
+      const stats=`time=${execTime}ms, points=${numPoints}, goodPoints=${goodPoints}<br/>pi=${pi}`
       setStats( id, stats )
 
       console.timeEnd(label);
     }
 
-    function polygons()
+    function drawPolygon( num )
     {
+      const start = window.performance.now()
+
+      const label=`drawPolygon-${num}`
+      console.time(label)
+      console.log('drawPolygon()')
+
+      const id = `polygon${num}`
+      const [ ctx, w, h, x0, y0, size ] = getCanvasContext( id )
+
+      const numPoints = w * h
+      const threshold = 0.5
+
+      const sides = 3 + Math.floor(Math.random()*6)
+
+      console.log( `  w=${w}, h=${h} size=${size}, sides=${sides}, points=${numPoints}, threshold=${threshold}` )
+
+      const origin = new Point( x0, y0 )
+      const polygon = makePolygon( sides, origin, size, 0 )
+
+      // Draw an outline
+
+      ctx.strokeStyle = 'white'
+      ctx.beginPath()
+
+      let n = 0
+      for ( const point of polygon )
+      {
+        if ( n === 0 ) {
+          ctx.moveTo( point.x, point.y )
+        }
+        else {
+          ctx.lineTo( point.x, point.y )
+        }
+
+        console.log( `${n++}: (${point.x}, ${point.y})` )
+      }
+
+      ctx.closePath()
+      ctx.stroke()
+
+      // Draw the polygon
+
+      let goodPoints = 0;
+
+      for ( let i = 0; i < numPoints; i ++ )
+      {
+        let theta = Math.random() * 2 * Math.PI
+        let rad = Math.sqrt( Math.random() ) * size
+
+        let x = rad * Math.cos( theta ) + x0
+        let y = rad * Math.sin( theta ) + y0
+
+        const point = new Point( x, y )
+
+        if ( ! pointInPolygon( point, polygon ) ) {
+          ctx.strokeStyle = 'red'
+        } else {
+          goodPoints ++
+
+          if ( Math.random() >= threshold ) {
+            ctx.strokeStyle = 'blue'
+          } else {
+            ctx.strokeStyle = 'green'
+          }
+        }
+
+        drawPoint( ctx, x, y )
+      }
+
+      const execTime = Math.floor( window.performance.now() - start )
+
+      const stats=`time=${execTime}ms, points=${numPoints}, goodPoints=${goodPoints}<br/>sides=${sides}`
+      setStats( id, stats )
+
+      console.timeEnd(label);
 
     }
 
-    function draw() {
+    function polygons()
+    {
+      drawPolygon(1)
+    }
+
+    function draw()
+    {
+      polygons()
+
       drawCircle(1)
       drawCircle(2)
 
@@ -257,6 +343,10 @@
     <div>
       <h3>Random x, y - more points needed</h3>
       <canvas id="circle3" width=400 height=400></canvas>
+    </div>
+    <div>
+      <h3>Polygon</h3>
+      <canvas id="polygon1" width=400 height=400></canvas>
     </div>
   </main>
 </body>
