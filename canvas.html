@@ -30,6 +30,10 @@
       color: darkblue;
     }
 
+    p {
+      background-color: antiquewhite;
+    }
+
     .wrong {
       background-color: gold;
       color: firebrick;
@@ -46,28 +50,104 @@
 
   <script type="text/javascript">
 
-    function drawCircle( num ) {
+    class Point {
+      constructor( x, y )
+      {
+        this.x = x
+        this.y = y
+      }
+    }
 
-      const canvas = document.getElementById(`circle${num}`)
+    function makePolygon( numSides, radius = 100, offset = 0 )
+    {
+      let polygon = []
+
+      let dtheta = 2 * Math.PI / numSides
+      let theta = offset
+
+      for ( let i = 0; i < numSides; i ++ )
+      {
+        let x = radius * Math.cos( theta )
+        let y = radius * Math.sin( theta )
+
+        polygon.push( new Point( x, y ) )
+      }
+
+      return polygon;
+    }
+
+    function drawPolygon( polygon )
+    {
+      let n = 0;
+      for ( const point of polygon )
+      {
+        console.log( `${n++}: (${point.x}, ${point.y}` )
+      }
+    }
+
+
+    function pointInPolygon( )
+    {
+
+    }
+
+    function drawPoint( ctx, x, y )
+    {
+      ctx.beginPath()
+      ctx.moveTo(x,y)
+      ctx.lineTo(x+1,y+1)
+      ctx.stroke()
+    }
+
+    function getCanvasContext( id )
+    {
+      const canvas = document.getElementById( id )
 
       ctx = canvas.getContext('2d')
       ctx.fillStyle = 'lightgrey'
       ctx.strokeStyle = 'green'
 
-      const w = canvas.width;
-      const h = canvas.height;
-
-      const numPoints = w * h / 10
+      const w = canvas.width
+      const h = canvas.height
 
       const x0 = w / 2
       const y0 = h / 2
-      const size = .95 * x0
+      const size = x0
 
       ctx.beginPath()
       ctx.arc( x0, y0, size, 0, 2 * Math.PI )
       ctx.fill()
 
-      console.log( `w=${w}, h=${h} size=${size}` )
+      return [ ctx, w, h, x0, y0, size ]
+    }
+
+    function setStats( id, stats )
+    {
+      const canvas = document.getElementById( id )
+      const parent = canvas.parentNode
+
+      const para = document.createElement("p")
+      para.innerHTML = stats
+
+      parent.insertBefore( para, canvas )
+    }
+
+    function drawCircle( num )
+    {
+      const start = window.performance.now()
+
+      const label=`drawCircle-${num}`
+      console.time(label)
+      console.log('drawCircle()')
+
+      const id = `circle${num}`
+
+      const [ ctx, w, h, x0, y0, size ] = getCanvasContext( id )
+
+      const numPoints = w * h
+      const threshold = 0.5
+
+      console.log( `  w=${w}, h=${h} size=${size}, points=${numPoints}, threshold=${threshold}` )
 
       for ( let i = 0; i < numPoints; i ++ )
       {
@@ -77,16 +157,88 @@
         let x = rad * Math.cos( theta ) + x0
         let y = rad * Math.sin( theta ) + y0
 
-        ctx.beginPath()
-        ctx.moveTo(x,y)
-        ctx.lineTo(x+1,y+1)
-        ctx.stroke()
+        if ( Math.random() >= threshold ) {
+          ctx.strokeStyle = 'blue'
+        } else {
+          ctx.strokeStyle = 'green'
+        }
+
+        drawPoint( ctx, x, y )
       }
+
+      const execTime = Math.floor( window.performance.now() - start )
+
+      const stats=`drawCircle(): time=${execTime}ms points=${numPoints} badPoints=${0}`
+      setStats( id, stats )
+
+      console.timeEnd(label);
+    }
+
+    function drawCircle2( num )
+    {
+      const start = window.performance.now()
+
+      const label=`drawCircle2-${num}`
+      console.time(label)
+      console.log('drawCircle2()')
+
+      const id = `circle${num}`
+      const [ ctx, w, h, x0, y0, size ] = getCanvasContext( id )
+
+      const numPoints = w * h
+      const threshold = 0.5
+
+      console.log( `  w=${w}, h=${h} size=${size}, points=${numPoints}, threshold=${threshold}` )
+
+      let goodPoints = 0;
+
+      for ( let i = 0; i < numPoints; i ++ )
+      {
+        let x, y, inCircle
+
+        x = Math.floor(Math.random() * w)
+        y = Math.floor(Math.random() * h)
+
+        const x2 = x - x0
+        const y2 = y - y0
+
+        inCircle = (Math.sqrt(x2 * x2 + y2 * y2) < size)
+
+        if (!inCircle) {
+          ctx.strokeStyle = 'red'
+        } else {
+          goodPoints ++
+
+          if (Math.random() >= threshold) {
+            ctx.strokeStyle = 'blue'
+          } else {
+            ctx.strokeStyle = 'green'
+          }
+        }
+
+        drawPoint(ctx, x, y)
+      }
+
+      const execTime = Math.floor( window.performance.now() - start )
+
+      const pi = 4 * goodPoints / numPoints
+
+      const stats=`drawCircle2(): time=${execTime}ms points=${numPoints} goodPoints=${goodPoints}, pi=${pi}`
+      setStats( id, stats )
+
+      console.timeEnd(label);
+    }
+
+    function polygons()
+    {
+
     }
 
     function draw() {
       drawCircle(1)
       drawCircle(2)
+
+      drawCircle2(3)
     }
   </script>
 
@@ -101,6 +253,10 @@
     <div>
       <h3>R=sqrt(random())*r</h3>
       <canvas id="circle2" width=400 height=400></canvas>
+    </div>
+    <div>
+      <h3>Random x, y - more points needed</h3>
+      <canvas id="circle3" width=400 height=400></canvas>
     </div>
   </main>
 </body>
