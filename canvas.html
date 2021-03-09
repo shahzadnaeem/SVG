@@ -46,6 +46,10 @@
     #circle2 {
       background-color: lightblue;
     }
+
+    .poly {
+      background-color: azure;
+    }
   </style>
 
   <script type="text/javascript">
@@ -79,16 +83,31 @@
     }
 
     // https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html
-    function pointInPolygon( p, po )
+    function pointInPolygon( p, po, trace = false )
     {
       let nv = po.length
       let i, j
       let c = false
 
+      // trace = ( Math.random() < 0.00001 ) && nv <= 6
+
+      if ( trace ) {
+        console.log( `pointInPolygon( (${p.x}, ${p.y}), sides=${nv} )` )
+      }
+
       for ( i = 0, j = nv - 1; i < nv; j = i++ ) {
+
         if ( ( (po[i].y > p.y) != (po[j].y > p.y) ) &&
               ( p.x < (po[j].x - po[i].x) * (p.y - po[i].y) / (po[j].y - po[i].y) + po[i].x) )
                   c = ! c
+
+        if ( trace ) {
+          console.log( `  i=${i}, j=${j}, ${c ? 'IN' : 'OUT'}` )
+        }
+      }
+
+      if ( trace ) {
+        console.log( c ? 'IN' : 'OUT' )
       }
 
       return c
@@ -246,7 +265,7 @@
       const numPoints = w * h
       const threshold = 0.5
 
-      const sides = 3 + Math.floor(Math.random()*6)
+      const sides = 2 + num // + Math.floor(Math.random()*6)
 
       console.log( `  w=${w}, h=${h} size=${size}, sides=${sides}, points=${numPoints}, threshold=${threshold}` )
 
@@ -309,12 +328,15 @@
       setStats( id, stats )
 
       console.timeEnd(label);
-
     }
 
     function polygons()
     {
-      drawPolygon(1)
+      for ( let p = 1; p < 8; p ++ ) {
+        drawPolygon(p)
+      }
+
+      drawPolygon(60)
     }
 
     function draw()
@@ -333,7 +355,7 @@
   <h1>Circle Points</h1>
   <main>
     <div>
-      <h3 class="wrong">R=random()*r WRONG!</h3>
+      <h3 class="wrong">R=random()*r - favours centre</h3>
       <canvas id="circle1" width=400 height=400></canvas>
     </div>
     <div>
@@ -341,12 +363,40 @@
       <canvas id="circle2" width=400 height=400></canvas>
     </div>
     <div>
-      <h3>Random x, y - more points needed</h3>
+      <h3 class="wrong">Random x, y - incorrect density</h3>
       <canvas id="circle3" width=400 height=400></canvas>
     </div>
     <div>
       <h3>Polygon</h3>
-      <canvas id="polygon1" width=400 height=400></canvas>
+      <canvas id="polygon1" class="poly" width=400 height=400></canvas>
+    </div>
+    <div>
+      <h3>Polygon</h3>
+      <canvas id="polygon2" class="poly" width=400 height=400></canvas>
+    </div>
+    <div>
+      <h3>Polygon</h3>
+      <canvas id="polygon3" class="poly" width=400 height=400></canvas>
+    </div>
+    <div>
+      <h3>Polygon</h3>
+      <canvas id="polygon4" class="poly" width=400 height=400></canvas>
+    </div>
+    <div>
+      <h3>Polygon</h3>
+      <canvas id="polygon5" class="poly" width=400 height=400></canvas>
+    </div>
+    <div>
+      <h3>Polygon</h3>
+      <canvas id="polygon6" class="poly" width=400 height=400></canvas>
+    </div>
+    <div>
+      <h3>Polygon</h3>
+      <canvas id="polygon7" class="poly" width=400 height=400></canvas>
+    </div>
+    <div>
+      <h3>Polygon</h3>
+      <canvas id="polygon60" class="poly" width=400 height=400></canvas>
     </div>
   </main>
 </body>
